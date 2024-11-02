@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\SoapTestController;
-use App\Http\Controllers\TrainRouteController;
+use App\Http\Controllers\TrainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,4 +22,4 @@ Route::get('/train-route', function () {
     return view('welcome');
 });
 
-Route::post('/train-route', [TrainRouteController::class, 'getRoute'])->name('train.route');
+Route::post('/train-route', [TrainController::class, 'getRoute'])->name('train.route');

@@ -8,7 +8,7 @@ use SoapFault;
 /**
  * Класс для работы с сервисом маршрутов поездов.
  */
-class TrainRouteService
+class TrainService
 {
     private $client;
 

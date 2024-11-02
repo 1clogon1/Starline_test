@@ -4,21 +4,21 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Services\TrainRouteService;
+use App\Services\TrainService;
 
 /**
  * Контроллер для обработки запросов на получение маршрутов поездов.
  */
-class TrainRouteController extends Controller
+class TrainController extends Controller
 {
     protected $trainRouteService;
 
     /**
-     * Конструктор, в который внедряется сервис TrainRouteService.
+     * Конструктор, в который внедряется сервис TrainService.
      *
-     * @param TrainRouteService $trainRouteService Сервис для работы с маршрутами поездов.
+     * @param TrainService $trainRouteService Сервис для работы с маршрутами поездов.
      */
-    public function __construct(TrainRouteService $trainRouteService)
+    public function __construct(TrainService $trainRouteService)
     {
         $this->trainRouteService = $trainRouteService; // Сохраняем экземпляр сервиса
     }
