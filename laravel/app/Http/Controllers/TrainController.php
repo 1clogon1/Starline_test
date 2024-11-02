@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Services\TrainService;
 
-/**
- * Контроллер для обработки запросов на получение маршрутов поездов.
- */
 class TrainController extends Controller
 {
     protected $trainRouteService;
 
-    /**
-     * Конструктор, в который внедряется сервис TrainService.
-     *
-     * @param TrainService $trainRouteService Сервис для работы с маршрутами поездов.
-     */
     public function __construct(TrainService $trainRouteService)
     {
         $this->trainRouteService = $trainRouteService; // Сохраняем экземпляр сервиса
@@ -32,16 +25,14 @@ class TrainController extends Controller
      */
     public function getRoute(Request $request)
     {
-        // Валидация входных данных
         $request->validate([
-            'train' => 'required|string', // Номер поезда обязателен
-            'from' => 'required|string', // Станция отправления обязательна
-            'to' => 'required|string', // Станция назначения обязательна
-            'day' => 'required|integer|min:1|max:31', // День месяца обязателен и должен быть в диапазоне
-            'month' => 'required|integer|min:1|max:12', // Месяц обязателен и должен быть в диапазоне
+            'train' => 'required|string',
+            'from' => 'required|string',
+            'to' => 'required|string',
+            'day' => 'required|integer|min:1|max:31',
+            'month' => 'required|integer|min:1|max:12',
         ]);
 
-        // Параметры аутентификации для SOAP
         $authParams = (object) [
             'login' => config('services.soap.login'),
             'psw' => config('services.soap.password'),
@@ -51,7 +42,6 @@ class TrainController extends Controller
             'currency' => config('services.soap.currency')
         ];
 
-        // Параметры запроса для SOAP
         $requestParams = (object) [
             'auth' => $authParams,
             'train' => $request->train,
@@ -63,7 +53,6 @@ class TrainController extends Controller
             ]
         ];
 
-        // Логируем информацию о запросе
         Log::info('Получен запрос на маршрут', [
             'train' => $request->train,
             'from' => $request->from,
@@ -73,17 +62,14 @@ class TrainController extends Controller
         ]);
 
         try {
-            // Вызываем сервис для получения маршрута
             $routeData = $this->trainRouteService->getRoute($authParams, $requestParams);
 
-            // Проверяем, получили ли данные маршрута
             if ($routeData) {
                 return response()->json(['route' => $routeData, 'success' => true]); // Успех
             }
 
             return response()->json(['success' => false, 'message' => 'Нет данных маршрута'], 404); // Нет данных
-        } catch (\Exception $e) {
-            // Логируем ошибку и возвращаем ответ с сообщением об ошибке
+        } catch (Exception $e) {
             Log::error('Ошибка: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
