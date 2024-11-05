@@ -15,11 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('train');
 });
 
 Route::get('/train-route', function () {
-    return view('welcome');
+    return view('train');
 });
 
 Route::post('/train-route', [TrainController::class, 'getRoute'])->name('train.route');

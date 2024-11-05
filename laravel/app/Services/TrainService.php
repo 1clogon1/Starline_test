@@ -10,9 +10,6 @@ class TrainService
 {
     private $client;
 
-    /**
-     * @throws SoapFault
-     */
     public function __construct()
     {
         $this->client = new SoapClient("https://test-api.starliner.ru/Api/connect/Soap/Train/1.1.0?wsdl", [
@@ -25,7 +22,7 @@ class TrainService
     /**
      * Получить маршрут поезда.
      *
-     * @param object $authParams Параметры аутентификации для SOAP.
+     * @param object $authParams Параметры аутентификации.
      * @param object $requestParams Параметры запроса для получения маршрута.
      * @return array|null Данные маршрута или null, если данные отсутствуют.
      * @throws \Exception Если произошла ошибка при выполнении запроса.
@@ -33,7 +30,7 @@ class TrainService
     public function getRoute($authParams, $requestParams)
     {
         try {
-            $response = $this->client->trainRoute($requestParams);
+            $response = $this->client->trainRoute($authParams, $requestParams->train, $requestParams->TravelInfo);
 
             if (isset($response->return)) {
                 return $this->parseResponse($response->return);

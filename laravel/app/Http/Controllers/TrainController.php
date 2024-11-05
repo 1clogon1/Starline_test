@@ -13,7 +13,7 @@ class TrainController extends Controller
 
     public function __construct(TrainService $trainRouteService)
     {
-        $this->trainRouteService = $trainRouteService; // Сохраняем экземпляр сервиса
+        $this->trainRouteService = $trainRouteService;
     }
 
     /**
@@ -43,7 +43,6 @@ class TrainController extends Controller
         ];
 
         $requestParams = (object) [
-            'auth' => $authParams,
             'train' => $request->train,
             'TravelInfo' => (object) [
                 'from' => $request->from,
@@ -65,10 +64,10 @@ class TrainController extends Controller
             $routeData = $this->trainRouteService->getRoute($authParams, $requestParams);
 
             if ($routeData) {
-                return response()->json(['route' => $routeData, 'success' => true]); // Успех
+                return response()->json(['route' => $routeData, 'success' => true]);
             }
 
-            return response()->json(['success' => false, 'message' => 'Нет данных маршрута'], 404); // Нет данных
+            return response()->json(['success' => false, 'message' => 'Нет данных маршрута'], 404);
         } catch (Exception $e) {
             Log::error('Ошибка: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
